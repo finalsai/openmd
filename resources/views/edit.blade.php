@@ -1,66 +1,58 @@
-<!DOCTYPE html>
-<html lang="en">
+@extends('layouts.common')
 
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Edit {{ $content->slug }}</title>
-    <link rel="stylesheet" href="https://unpkg.com/vditor/dist/index.css" />
-    @vite('resources/css/app.css')
-</head>
+@section('title', 'Edit ' . $content->slug . ' - text.is')
 
-<body class=" max-w-screen-lg mx-auto bg-slate-50 p-5 h-screen flex flex-col">
-    <div class=" inline-block bg-white mx-auto p-4 rounded uppercase font-bold select-none">paste markdown</div>
-    <div class=" mt-8 flex-1 flex flex-col">
-        <div id="area" class=" flex-1"></div>
+@push('styles')
+<link rel="stylesheet" href="https://unpkg.com/vditor/dist/index.css" />
+@endpush
 
-        @if($errors->any())
-        <div class=" mt-4 bg-red-200 text-black p-2 rounded">{{ $errors->first() }}</div>
-        @endif
+@section('content')
+<div class=" mt-8 flex-1 flex flex-col">
+    <div id="area" class=" flex-1"></div>
 
-        <form name="mainform" action="{{ route('content.update', ['content' => $content->slug]) }}" method="post" onsubmit="event.preventDefault()" class=" mt-4 flex items-center justify-between">
-            @method('put')
-            @csrf
-            <input type="hidden" name="markdown">
-            <input type="text" name="slug" disabled placeholder="Custom URL" value="{{ $content->slug }}" id="slug" class=" outline outline-slate-200 p-2 rounded bg-white disabled:bg-slate-100 disabled:text-slate-600" autocomplete="off">
-            <input type="text" name="edit" placeholder="Edit Password" value="{{ $content->edit_token }}" id="edit" class=" outline outline-slate-200 p-2 rounded bg-white" autocomplete="off">
-            <input type="text" name="access" placeholder="Access Password" value="{{ $content->access_token }}" id="access" class=" outline outline-slate-200 p-2 rounded bg-white" autocomplete="off">
+    @if($errors->any())
+    <div class=" mt-4 bg-red-200 text-black p-2 rounded">{{ $errors->first() }}</div>
+    @endif
 
-            <label class="relative inline-flex items-center cursor-pointer select-none">
-                <input type="checkbox" disabled name="onetime" value="1" @checked($content->disposable) class="sr-only peer">
-                <div class="w-11 h-6 bg-gray-200 peer-focus:outline-none rounded-full peer dark:bg-gray-700 peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-green-600 peer-disabled:bg-green-200 peer-disabled:cursor-default"></div>
-                <span class="ml-3 text-sm font-medium text-gray-900 dark:text-gray-300 uppercase">Burn after read</span>
-            </label>
+    <form name="mainform" action="{{ route('content.update', ['content' => $content->slug]) }}" method="post" onsubmit="event.preventDefault()" class=" mt-4 flex items-center justify-between">
+        @method('put')
+        @csrf
+        <input type="hidden" name="markdown">
+        <input type="text" name="slug" disabled placeholder="Custom URL" value="{{ $content->slug }}" id="slug" class=" outline outline-slate-200 p-2 rounded bg-white disabled:bg-slate-100 disabled:text-slate-600" autocomplete="off">
+        <input type="text" name="edit" placeholder="Edit Password" value="{{ $content->edit_token }}" id="edit" class=" outline outline-slate-200 p-2 rounded bg-white" autocomplete="off">
+        <input type="text" name="access" placeholder="Access Password" value="{{ $content->access_token }}" id="access" class=" outline outline-slate-200 p-2 rounded bg-white" autocomplete="off">
 
-            <button onclick="submitForm()" class=" min-w-[8rem] py-2 rounded bg-zinc-950 text-white">Save</button>
-        </form>
-    </div>
-    <footer class=" mt-8 flex flex-col justify-center items-center">
-        <div class=" text-slate-800">&copy; PasteMD</div>
-    </footer>
+        <label class="relative inline-flex items-center cursor-pointer select-none">
+            <input type="checkbox" disabled name="onetime" value="1" @checked($content->disposable) class="sr-only peer">
+            <div class="w-11 h-6 bg-gray-200 peer-focus:outline-none rounded-full peer dark:bg-gray-700 peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-green-600 peer-disabled:bg-green-200 peer-disabled:cursor-default"></div>
+            <span class="ml-3 text-sm font-medium text-gray-900 dark:text-gray-300 uppercase">Burn after read</span>
+        </label>
 
-    <script src="https://unpkg.com/vditor/dist/index.min.js"></script>
-    @vite('resources/js/app.js')
-    <script>
-        const vditor = new Vditor('area', {
-            value: `{!! $content->markdown !!}`,
-            height: '100%',
-            toolbar: [
-                'emoji', 'headings', 'bold', 'italic', 'strike', '|',
-                'line', 'quote', 'list', 'ordered-list', 'check',
-                'outdent', 'indent', 'code', 'inline-code',
-                'insert-after', 'insert-before', 'undo', 'redo',
-                'link', 'table', 'record', 'fullscreen', 'outline',
-                'export', 'br',
-            ]
-        });
+        <button onclick="submitForm()" class=" min-w-[8rem] py-2 rounded bg-zinc-950 text-white">Save</button>
+    </form>
+</div>
+@endsection
 
-        function submitForm() {
-            document.getElementsByName('markdown')[0].value = vditor.getValue();
-            vditor.clearStack();
-            document.forms['mainform'].submit();
-        }
-    </script>
-</body>
+@push('scripts')
+<script src="https://unpkg.com/vditor/dist/index.min.js"></script>
+<script>
+    const vditor = new Vditor('area', {
+        value: `{!! $content->markdown !!}`,
+        height: '100%',
+        toolbar: [
+            'emoji', 'headings', 'bold', 'italic', 'strike', '|',
+            'line', 'quote', 'list', 'ordered-list', 'check',
+            'outdent', 'indent', 'code', 'inline-code',
+            'insert-after', 'insert-before', 'undo', 'redo',
+            'link', 'table', 'record', 'fullscreen', 'outline',
+            'export', 'br',
+        ]
+    });
 
-</html>
+    function submitForm() {
+        document.getElementsByName('markdown')[0].value = vditor.getValue();
+        vditor.clearStack();
+        document.forms['mainform'].submit();
+    }
+</script>
+@endpush
