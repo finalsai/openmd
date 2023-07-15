@@ -30,3 +30,12 @@ window.axios.defaults.headers.common['X-Requested-With'] = 'XMLHttpRequest';
 //     forceTLS: (import.meta.env.VITE_PUSHER_SCHEME ?? 'https') === 'https',
 //     enabledTransports: ['ws', 'wss'],
 // });
+
+import domtoimage from 'dom-to-image';
+window.domtoimage = domtoimage;
+
+import { saveAs } from 'file-saver';
+window.saveAs = saveAs;
+
+import domtopdf from 'dom-to-pdf';
+window.domtopdf = domtopdf;
