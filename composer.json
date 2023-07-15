@@ -6,6 +6,7 @@
     "license": "MIT",
     "require": {
         "php": "^8.1",
+        "dcat/laravel-admin": "2.0.x-dev",
         "graham-campbell/markdown": "^15.0",
         "guzzlehttp/guzzle": "^7.2",
         "laravel/framework": "^10.10",
