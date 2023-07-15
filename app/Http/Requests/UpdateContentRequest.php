@@ -22,7 +22,9 @@ class UpdateContentRequest extends FormRequest
     public function rules(): array
     {
         return [
-            //
+            'markdown' => 'required|max:65535',
+            'edit' => 'min:4|max:64',
+            'access' => 'min:4|max:64',
         ];
     }
 }

@@ -99,7 +99,13 @@ class ContentController extends Controller
      */
     public function update(UpdateContentRequest $request, Content $content)
     {
-        //
+        $data = $request->validated();
+        $content->markdown = $data['markdown'];
+        $content->access_token = $data['access'];
+        $content->edit_token = $data['edit'];
+        $content->saveOrFail();
+
+        return redirect()->route('content.show', ['content' => $content->slug]);
     }
 
     /**

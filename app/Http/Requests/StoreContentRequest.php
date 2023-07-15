@@ -23,8 +23,8 @@ class StoreContentRequest extends FormRequest
     {
         return [
             'slug' => 'max:32|unique:contents,slug',
-            'edit' => 'max:64',
-            'access' => 'max:64',
+            'edit' => 'min:4|max:64',
+            'access' => 'min:4|max:64',
             'markdown' => 'required|max:65535',
             'onetime' => 'boolean',
         ];

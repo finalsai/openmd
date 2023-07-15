@@ -21,6 +21,6 @@ Route::get('/{content:slug}', [ContentController::class, 'show'])->name('content
 Route::delete('/{content:slug}', [ContentController::class, 'destroy'])->name('content.destroy');
 
 Route::get('/{content:slug}/edit', [ContentController::class, 'edit'])->name('content.edit');
-Route::post('/{content:slug}/edit', [ContentController::class, 'store']);
+Route::put('/{content:slug}', [ContentController::class, 'update'])->name('content.update');
 
 Route::post('/{content:slug}/auth', [ContentController::class, 'auth'])->name('content.auth');
