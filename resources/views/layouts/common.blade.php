@@ -11,12 +11,12 @@
 </head>
 
 <body class=" max-w-screen-lg mx-auto bg-slate-50 p-5 h-screen flex flex-col gap-4">
-    <div class=" inline-block bg-white mx-auto p-4 rounded uppercase font-bold select-none">paste markdown</div>
+    <div class=" inline-block bg-white mx-auto p-4 rounded uppercase font-bold select-none">text.is</div>
 
     @yield('content')
 
     <footer class=" mt-8 flex flex-col justify-center items-center">
-        <div class=" text-slate-800">&copy; PasteMD</div>
+        <div class=" text-slate-800">&copy; text.is 2023</div>
     </footer>
 
     @stack('scripts')
