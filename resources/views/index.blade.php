@@ -15,7 +15,7 @@
     <form name="mainform" action="" method="post" onsubmit="event.preventDefault()" class=" mt-4 flex items-center justify-between">
         @csrf
         <input type="hidden" name="markdown">
-        <input type="text" name="slug" placeholder="Custom URL" value="{{ old('slug') }}" id="slug" class=" outline outline-slate-200 p-2 rounded bg-white" autocomplete="off" min="2" maxlength="64">
+        <input type="text" name="slug" placeholder="Custom URL" value="{{ old('slug') }}" id="slug" class=" outline outline-slate-200 p-2 rounded bg-white" autocomplete="off" min="2" maxlength="32">
         <input type="text" name="edit" placeholder="Edit Password" value="{{ old('edit') }}" id="edit" class=" outline outline-slate-200 p-2 rounded bg-white" autocomplete="off" minlength="1" maxlength="64">
         <input type="text" name="access" placeholder="Access Password" value="{{ old('access') }}" id="access" class=" outline outline-slate-200 p-2 rounded bg-white" autocomplete="off" minlength="1" maxlength="64">
 
@@ -35,6 +35,10 @@
 <script>
     const vditor = new Vditor('area', {
         height: '100%',
+        mode: 'sv',
+        preview: {
+            actions: 'none',
+        },
         toolbar: [
             "emoji",
             "headings",
@@ -71,6 +75,10 @@
         document.getElementsByName('markdown')[0].value = vditor.getValue();
         vditor.clearStack();
         document.forms['mainform'].submit();
+    }
+
+    function toggleToolbar() {
+        vditor.vditor.toolbar.element.classList.toggle('hidden')
     }
 </script>
 @endpush

@@ -7,6 +7,7 @@ use App\Http\Requests\UpdateContentRequest;
 use App\Models\Content;
 use App\Models\Report;
 use Illuminate\Http\Request;
+use Illuminate\Support\Str;
 
 class ContentController extends Controller
 {
@@ -33,8 +34,8 @@ class ContentController extends Controller
     {
         $data = $request->validated();
         $row = new Content();
-        $row->slug = $data['slug'] ?? uniqid('s');
-        $row->edit_token = $data['edit'] ?? uniqid('e');
+        $row->slug = $data['slug'] ?? Str::random(5);
+        $row->edit_token = $data['edit'] ?? Str::random(5);
         $row->access_token = $data['access'] ?? null;
         $row->markdown = $data['markdown'];
         $row->disposable = boolval($data['onetime'] ?? 'no');
@@ -101,7 +102,7 @@ class ContentController extends Controller
     {
         $data = $request->validated();
         $content->markdown = $data['markdown'];
-        $content->access_token = $data['access'];
+        $content->access_token = $data['access'] ?? null;
         $content->edit_token = $data['edit'];
         $content->saveOrFail();
 

@@ -23,8 +23,8 @@ class UpdateContentRequest extends FormRequest
     {
         return [
             'markdown' => 'required|max:65535',
-            'edit' => 'min:4|max:64',
-            'access' => 'min:4|max:64',
+            'edit' => 'min:1|max:64',
+            'access' => 'min:1|max:64|nullable',
         ];
     }
 }

@@ -22,9 +22,9 @@ class StoreContentRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'slug' => 'min:8|max:32|unique:contents,slug|nullable',
-            'edit' => 'min:4|max:64|nullable',
-            'access' => 'min:4|max:64|nullable',
+            'slug' => 'min:2|max:32|unique:contents,slug|nullable',
+            'edit' => 'min:1|max:64|nullable',
+            'access' => 'min:1|max:64|nullable',
             'markdown' => 'required|max:65535',
             'onetime' => 'boolean',
         ];
