@@ -22,7 +22,7 @@ class StoreContentRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'slug' => 'min:2|max:32|unique:contents,slug|nullable',
+            'slug' => 'min:2|max:32|alpha_num:ascii|unique:contents,slug|nullable',
             'edit' => 'min:1|max:64|nullable',
             'access' => 'min:1|max:64|nullable',
             'markdown' => 'required|max:65535',
@@ -34,6 +34,7 @@ class StoreContentRequest extends FormRequest
     {
         return [
             'slug.unique' => 'The custom URL already been taken',
+            'slug.alpha_num' => 'The custom URL only allows letters and numbers',
             'markdown.required' => 'The markdown should not empty',
         ];
     }

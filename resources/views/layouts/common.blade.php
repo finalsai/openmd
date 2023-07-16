@@ -14,10 +14,9 @@
     <nav class=" w-full bg-white mx-auto p-4 rounded select-none flex justify-between">
         <div class=" uppercase font-bold">text.is</div>
         <div class=" flex gap-4 text-base text-slate-600 transition-colors">
-            <!-- <a class=" hover:text-slate-900" href="">What</a>
-            <a class=" hover:text-slate-900" href="">How</a>
-            <a class=" hover:text-slate-900" href="">Lang</a>
-            <a class=" hover:text-slate-900" href="">Contact</a> -->
+            @foreach ($links as $link)
+            <a target="{{ $link->target }}" class=" hover:text-slate-900" href="{{ $link->url }}">{{ $link->title }}</a>
+            @endforeach
         </div>
     </nav>
 
