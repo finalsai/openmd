@@ -120,9 +120,9 @@ class ContentController extends Controller
         $report->referrer = request()->header('Referer');
         $report->save();
 
-        $count = $content->reports()->count();
-        if ($count > 5) {
-            $content->delete();
-        }
+        // $count = $content->reports()->count();
+        // if ($count > 5) {
+        //     $content->delete();
+        // }
     }
 }

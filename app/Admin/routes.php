@@ -1,5 +1,7 @@
 <?php
 
+use App\Admin\Controllers\ContentController;
+use App\Admin\Controllers\ReportController;
 use Illuminate\Routing\Router;
 use Illuminate\Support\Facades\Route;
 use Dcat\Admin\Admin;
@@ -13,5 +15,6 @@ Route::group([
 ], function (Router $router) {
 
     $router->get('/', 'HomeController@index');
-
+    $router->resource('reports', ReportController::class);
+    $router->resource('contents', ContentController::class);
 });
