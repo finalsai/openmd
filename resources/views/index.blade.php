@@ -5,7 +5,7 @@
 @endpush
 
 @section('content')
-<div class=" mt-8 flex-1 flex flex-col">
+<div class=" flex-1 flex flex-col">
     <div id="area" class=" flex-1"></div>
 
     @if($errors->any())
@@ -15,9 +15,9 @@
     <form name="mainform" action="" method="post" onsubmit="event.preventDefault()" class=" mt-4 flex items-center justify-between">
         @csrf
         <input type="hidden" name="markdown">
-        <input type="text" name="slug" placeholder="Custom URL" value="{{ old('slug') }}" id="slug" class=" outline outline-slate-200 p-2 rounded bg-white" autocomplete="off">
-        <input type="text" name="edit" placeholder="Edit Password" value="{{ old('edit') }}" id="edit" class=" outline outline-slate-200 p-2 rounded bg-white" autocomplete="off">
-        <input type="text" name="access" placeholder="Access Password" value="{{ old('access') }}" id="access" class=" outline outline-slate-200 p-2 rounded bg-white" autocomplete="off">
+        <input type="text" name="slug" placeholder="Custom URL" value="{{ old('slug') }}" id="slug" class=" outline outline-slate-200 p-2 rounded bg-white" autocomplete="off" min="2" maxlength="64">
+        <input type="text" name="edit" placeholder="Edit Password" value="{{ old('edit') }}" id="edit" class=" outline outline-slate-200 p-2 rounded bg-white" autocomplete="off" minlength="1" maxlength="64">
+        <input type="text" name="access" placeholder="Access Password" value="{{ old('access') }}" id="access" class=" outline outline-slate-200 p-2 rounded bg-white" autocomplete="off" minlength="1" maxlength="64">
 
         <label class="relative inline-flex items-center cursor-pointer select-none">
             <input type="checkbox" name="onetime" value="1" @checked(old('onetime')) class="sr-only peer">

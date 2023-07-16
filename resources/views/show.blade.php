@@ -19,7 +19,8 @@
 </div>
 
 <div class=" flex justify-between items-center">
-    <div class=" p-2 bg-white text-slate-700 rounded select-none">Already {{ $content->view_count }} people have viewed</div>
+    <div class=" p-2 bg-white text-slate-600 rounded select-none">Already {{ $content->view_count }} people have viewed</div>
+    <div class=" p-2 bg-white text-slate-600 rounded select-none">{{ $content->updated_at }}</div>
 
     <div class=" flex gap-4 items-center select-none">
         <a href="{{ route('content.edit', ['content' => $content->slug]) }}" class=" px-4 py-1 bg-red-200 disabled:bg-red-100 text-black disabled:text-slate-500 cursor-pointer rounded">Edit</a>
