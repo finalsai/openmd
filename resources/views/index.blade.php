@@ -1,7 +1,7 @@
 @extends('layouts.common')
 
 @push('styles')
-<link rel="stylesheet" href="https://unpkg.com/vditor/dist/index.css" />
+<link rel="stylesheet" href="https://unpkg.com@3.9.4/vditor/dist/index.css" />
 @endpush
 
 @section('content')
@@ -31,7 +31,7 @@
 @endsection
 
 @push('scripts')
-<script src="https://unpkg.com/vditor/dist/index.min.js"></script>
+<script src="https://unpkg.com/vditor@3.9.4/dist/index.min.js"></script>
 <script>
     const vditor = new Vditor('area', {
         height: '100%',
