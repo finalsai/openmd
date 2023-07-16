@@ -54,15 +54,15 @@ class ContentController extends Controller
     public function show(Content $content)
     {
         if (session('owner:' . $content->slug)) {
-            return view('show')->with('content', $content);
+            return view('show')->with('content', $content)->with('page', $content);
         }
 
         if ($content->access_token && session('access:' . $content->slug) != $content->access_token) {
-            return view('auth')->with('content', $content);
+            return view('auth')->with('content', $content)->with('page', $content);
         }
 
         $content->update(['view_count' => ++$content->view_count]);
-        return view('show')->with('content', $content);
+        return view('show')->with('content', $content)->with('page', $content);
     }
 
     /**
@@ -71,14 +71,14 @@ class ContentController extends Controller
     public function edit(Content $content)
     {
         if (session('owner:' . $content->slug)) {
-            return view('edit')->with('content', $content);
+            return view('edit')->with('content', $content)->with('page', $content);
         }
 
         if ($content->edit_token && session('edit:' . $content->slug) != $content->edit_token) {
-            return view('auth')->with('content', $content);
+            return view('auth')->with('content', $content)->with('page', $content);
         }
 
-        return view('edit')->with('content', $content);
+        return view('edit')->with('content', $content)->with('page', $content);
     }
 
     public function auth(Content $content)
