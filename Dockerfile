@@ -1,6 +1,8 @@
 # compile
 FROM node:18-alpine AS compile
 
+RUN apk update && apk add git
+
 WORKDIR /app
 
 COPY package.json yarn.lock ./
