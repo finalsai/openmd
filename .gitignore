@@ -21,3 +21,4 @@ rr
 .rr.yaml
 sqlite.db
 database/database.db
+.DS_Store
