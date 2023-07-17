@@ -1,7 +1,5 @@
 @extends('layouts.common')
 
-@section('title', 'Authorize to ' . $content->slug . ' - text.is')
-
 @section('content')
 <form action="{{ route('content.auth', ['content' => $content->slug]) }}" method="post" class=" flex-1 flex flex-col items-center justify-center gap-4">
     @csrf

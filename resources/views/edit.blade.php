@@ -1,7 +1,5 @@
 @extends('layouts.common')
 
-@section('title', 'Edit ' . $content->slug . ' - text.is')
-
 @push('styles')
 <link rel="stylesheet" href="https://unpkg.com/vditor@3.9.4/dist/index.css" />
 @endpush
