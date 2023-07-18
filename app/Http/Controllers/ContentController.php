@@ -62,6 +62,11 @@ class ContentController extends Controller
         }
 
         $content->update(['view_count' => ++$content->view_count]);
+
+        if ($content->disposable) {
+            $content->delete();
+        }
+
         return view('show')->with('content', $content)->with('page', $content);
     }
 

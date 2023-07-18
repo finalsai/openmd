@@ -15,7 +15,7 @@
 
 <body class=" max-w-screen-lg mx-auto bg-slate-50 p-5 h-screen flex flex-col gap-8">
     <nav class=" w-full bg-white mx-auto p-4 rounded select-none flex justify-between">
-        <div class=" uppercase font-bold">{{ config('app.name') }}</div>
+        <a href="{{ url('') }}" class=" uppercase font-bold">{{ config('app.name') }}</a>
         <div class=" flex gap-4 text-base text-slate-600 transition-colors">
             @foreach ($links as $link)
             <a target="{{ $link->target }}" class=" hover:text-slate-900" href="{{ $link->url }}">{{ $link->title }}</a>
