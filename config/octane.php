@@ -71,7 +71,7 @@ return [
         RequestReceived::class => [
             ...Octane::prepareApplicationForNextOperation(),
             ...Octane::prepareApplicationForNextRequest(),
-            //
+            Dcat\Admin\Octane\Listeners\FlushAdminState::class,
         ],
 
         RequestHandled::class => [
