@@ -3,7 +3,7 @@ import './bootstrap';
 window.onload = function() {
     if (document.getElementById('area')) {
         const vditor = new Vditor('area', {
-            value: window.raw,
+            value: this.raw || '',
             height: '100%',
             mode: 'sv',
             preview: {

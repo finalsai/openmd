@@ -38,7 +38,7 @@ class ContentController extends Controller
         $row->edit_token = $data['edit'] ?? Str::random(5);
         $row->access_token = $data['access'] ?? null;
         $row->markdown = $data['markdown'];
-        $row->disposable = boolval($data['onetime'] ?? 'no');
+        $row->disposable = boolval($data['onetime'] ?? '0');
         $row->saveOrFail();
 
         session()->put('owner:' . $row->slug, time());
@@ -63,8 +63,9 @@ class ContentController extends Controller
 
         $content->update(['view_count' => ++$content->view_count]);
 
-        if ($content->disposable) {
+        if ($content->disposable && $content->view_count > 1) {
             $content->delete();
+            abort(404);
         }
 
         return view('show')->with('content', $content)->with('page', $content);
@@ -82,6 +83,8 @@ class ContentController extends Controller
         if ($content->edit_token && session('edit:' . $content->slug) != $content->edit_token) {
             return view('auth')->with('content', $content)->with('page', $content);
         }
+
+        session()->put('owner:' . $content->slug, time());
 
         return view('edit')->with('content', $content)->with('page', $content);
     }
