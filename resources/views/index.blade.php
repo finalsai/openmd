@@ -6,7 +6,7 @@
 
 @section('content')
 <div class=" flex-1 flex flex-col">
-    <div id="area" class=" flex-1"></div>
+    <div id="area" class=" flex-1 bg-white"></div>
 
     @if($errors->any())
     <div class=" mt-4 bg-red-200 text-black p-2 rounded">{{ $errors->first() }}</div>

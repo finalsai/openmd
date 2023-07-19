@@ -3,11 +3,17 @@ import './bootstrap';
 window.onload = function() {
     if (document.getElementById('area')) {
         const vditor = new Vditor('area', {
-            value: this.raw || '',
             height: '100%',
             mode: 'sv',
             preview: {
                 actions: 'none',
+            },
+            counter: {
+                enable: true,
+            },
+            cache: {
+                enable: true,
+                id: this.raw ? location.pathname : 'openmd',
             },
             toolbar: [
                 "emoji",
@@ -38,13 +44,17 @@ window.onload = function() {
                 "edit-mode",
                 "export",
                 "outline",
-            ]
+            ],
+            after: () => {
+                if (this.raw) {
+                    vditor.setValue(this.raw);
+                }
+            }
         });
 
         document.getElementById('go').addEventListener('click', () => {
             document.getElementsByName('markdown')[0].value = vditor.getValue();
-            vditor.clearStack();
-            vditor.clearCache();
+            vditor.setValue('');
             document.forms['mainform'].submit();
         })
     }
