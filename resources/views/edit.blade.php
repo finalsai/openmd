@@ -5,14 +5,14 @@
 @endpush
 
 @section('content')
-<div class=" mt-8 flex-1 flex flex-col">
+<div class=" flex-1 flex flex-col">
     <div id="area" class=" flex-1 bg-white"></div>
 
     @if($errors->any())
     <div class=" mt-4 bg-red-200 text-black p-2 rounded">{{ $errors->first() }}</div>
     @endif
 
-    <form name="mainform" action="{{ route('content.update', ['content' => $content->slug]) }}" method="post" onsubmit="event.preventDefault()" class=" mt-4 flex items-center justify-between">
+    <form name="mainform" action="{{ route('content.update', ['content' => $content->slug]) }}" method="post" onsubmit="event.preventDefault()" class=" mt-4 flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
         @method('put')
         @csrf
         <input type="hidden" name="markdown">

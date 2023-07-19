@@ -2,7 +2,7 @@
 
 @push('styles')
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/github-markdown-css/5.2.0/github-markdown-light.min.css" integrity="sha512-bm684OXnsiNuQSyrxuuwo4PHqr3OzxPpXyhT66DA/fhl73e1JmBxRKGnO/nRwWvOZxJLRCmNH7FII+Yn1JNPmg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
-<link href="https://cdn.jsdelivr.net/npm/remixicon@3.4.0/fonts/remixicon.css" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/remixicon/3.4.0/remixicon.min.css" integrity="sha512-13RM4Q4wPLiDEFNxKQbZMoyM3qR3eIsTYoXy6hJlqWmPzFCBLyxG3LGx/48N+sTcLxvN3IoThkZYxo3yuaGSvw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
 @endpush
 
 @section('content')
@@ -12,20 +12,27 @@
     Your edit password is <b class=" select-all text-lg">{{ request()->session()->get('edit') }}</b>
 </div>
 @endif
-<div id="md" class=" flex-1 w-full rounded p-4 markdown-body">
-    @markdown($content->markdown)
-</div>
 
-<div class=" flex justify-between items-center">
-    <div class=" p-2 bg-white text-slate-600 rounded select-none">Already {{ $content->view_count }} people have viewed</div>
-    <div class=" p-2 bg-white text-slate-600 rounded select-none">{{ $content->updated_at }}</div>
+<section>
+    <main id="md" class=" flex-1 w-full rounded p-4 markdown-body">
+        @markdown($content->markdown)
+    </main>
 
-    <div class=" flex gap-4 items-center select-none">
-        <a href="{{ route('content.edit', ['content' => $content->slug]) }}" class=" px-4 py-1 bg-red-200 disabled:bg-red-100 text-black disabled:text-slate-500 cursor-pointer rounded">Edit</a>
-        <a class=" px-4 py-1 text-2xl text-red-600 cursor-pointer rounded" onclick="toggle('report')"><i class="ri-alarm-warning-fill"></i></a>
-        <a class=" px-4 py-1 bg-slate-900 text-white cursor-pointer rounded" onclick="exportPng()">Export as .png</a>
-        <a class=" px-4 py-1 bg-slate-900 text-white cursor-pointer rounded" onclick="exportPdf()">Export as .pdf</a>
-    </div>
+    <footer class=" p-1 text-xs text-slate-600 rounded select-none flex justify-between">
+        <p class=" uppercase">
+        visits: {{ $content->view_count }}
+        </p>
+        <p class=" uppercase">
+        updated: {{ $content->updated_at }}
+        </p>
+    </footer>
+</section>
+
+<div class=" grid grid-cols-2 md:flex flex-row gap-4 md:justify-end md:items-center">
+    <a id="spam" class=" px-4 py-1 bg-red-700 hover:bg-red-600 text-white cursor-pointer rounded uppercase w-full md:w-auto" onclick="toggle('report')"><i class="ri-spam-2-line"></i> Spam</a>
+    <a class=" px-4 py-1 bg-red-200 hover:bg-red-100 disabled:bg-red-100 text-black disabled:text-slate-500 cursor-pointer rounded uppercase" href="{{ route('content.edit', ['content' => $content->slug]) }}">Edit</a>
+    <a id="png" class=" px-4 py-1 bg-slate-900 hover:bg-slate-700 text-white cursor-pointer rounded uppercase"><i class="ri-image-line"></i> Export .png</a>
+    <a id="pdf" class=" px-4 py-1 bg-slate-900 hover:bg-slate-700 text-white cursor-pointer rounded uppercase"><i class="ri-file-pdf-line"></i> Export .pdf</a>
 </div>
 
 <div id="report" tabindex="-1" class="fixed top-0 left-0 w-screen min-h-screen z-50 hidden p-4 overflow-x-hidden overflow-y-auto md:inset-0 justify-center items-center bg-[rgba(0,0,0,0.2)]">
@@ -54,45 +61,31 @@
 
 @push('scripts')
 <script>
-    function exportPng() {
-        domtoimage.toBlob(document.getElementById('md'))
-            .then(blob => window.saveAs(blob, 'exported.png'))
-            .catch(e => console.error(e));
+function toggle(id) {
+    const dom = document.getElementById(id);
+    if (dom.classList.contains('hidden')) {
+        dom.classList.remove('hidden');
+        dom.classList.add('flex');
+    } else {
+        dom.classList.remove('flex');
+        dom.classList.add('hidden')
     }
+}
 
-    function exportPdf() {
-        domtopdf(document.getElementById('md'), {
-            filename: 'exported.pdf'
-        }, (pdf) => {
-            console.log('done');
-        });
-    }
+function report(e) {
+    e.setAttribute('disabled', 'disabled');
 
-    function toggle(id) {
-        const dom = document.getElementById(id);
-        if (dom.classList.contains('hidden')) {
-            dom.classList.remove('hidden');
-            dom.classList.add('flex');
-        } else {
-            dom.classList.remove('flex');
-            dom.classList.add('hidden')
+    fetch('', {
+        method: 'delete',
+        headers: {
+            'X-CSRF-TOKEN': '{{ csrf_token() }}',
         }
-    }
-
-    function report(e) {
-        e.setAttribute('disabled', 'disabled');
-
-        fetch('', {
-            method: 'delete',
-            headers: {
-                'X-CSRF-TOKEN': '{{ csrf_token() }}',
-            }
-        }).then(() => {
-            alert('ok')
-        }).finally(() => {
-            e.removeAttribute('disabled');
-            toggle('report');
-        })
-    }
+    }).then(() => {
+        alert('ok')
+    }).finally(() => {
+        e.removeAttribute('disabled');
+        toggle('report');
+    })
+}
 </script>
 @endpush

@@ -58,4 +58,22 @@ window.onload = function() {
             document.forms['mainform'].submit();
         })
     }
+
+    document.getElementById('png')?.addEventListener('click', () => {
+        domtoimage.toBlob(document.getElementById('md'))
+            .then(blob => window.saveAs(blob, 'exported.png'))
+            .catch(e => console.error(e));
+    });
+
+    document.getElementById('pdf')?.addEventListener('click', () => {
+        domtopdf(document.getElementById('md'), {
+            filename: 'exported.pdf'
+        }, (pdf) => {
+            console.log('done');
+        });
+    });
+
+    // document.getElementById('spam')?.addEventListener('click', () => {
+    //     toggle('report')
+    // });
 }

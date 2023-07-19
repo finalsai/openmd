@@ -12,7 +12,7 @@
     <div class=" mt-4 bg-red-200 text-black p-2 rounded">{{ $errors->first() }}</div>
     @endif
 
-    <form name="mainform" action="" method="post" onsubmit="event.preventDefault()" class=" mt-4 flex items-center justify-between">
+    <form name="mainform" action="" method="post" onsubmit="event.preventDefault()" class=" mt-4 flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
         @csrf
         <input type="hidden" name="markdown">
         <input type="text" name="slug" placeholder="Custom URL" value="{{ old('slug') }}" id="slug" class=" outline outline-slate-200 p-1 rounded bg-white" autocomplete="off" min="2" maxlength="32">
