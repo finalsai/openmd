@@ -6,18 +6,18 @@
 
 @section('content')
 <div class=" flex-1 flex flex-col">
-    <div id="area" class=" flex-1 bg-white"></div>
+    <div id="area" class=" flex-1 bg-white dark:bg-zinc-800"></div>
 
     @if($errors->any())
-    <div class=" mt-4 bg-red-200 text-black p-2 rounded">{{ $errors->first() }}</div>
+    <div class=" mt-4 bg-red-200 dark:bg-red-900 p-2 rounded">{{ $errors->first() }}</div>
     @endif
 
     <form name="mainform" action="" method="post" onsubmit="event.preventDefault()" class=" mt-4 flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
         @csrf
         <input type="hidden" name="markdown">
-        <input type="text" name="slug" placeholder="Custom URL" value="{{ old('slug') }}" id="slug" class=" outline outline-slate-200 p-1 rounded bg-white" autocomplete="off" min="2" maxlength="32">
-        <input type="text" name="edit" placeholder="Edit Password" value="{{ old('edit') }}" id="edit" class=" outline outline-slate-200 p-1 rounded bg-white" autocomplete="off" minlength="1" maxlength="64">
-        <input type="text" name="access" placeholder="Access Password" value="{{ old('access') }}" id="access" class=" outline outline-slate-200 p-1 rounded bg-white" autocomplete="off" minlength="1" maxlength="64">
+        <input type="text" name="slug" placeholder="Custom URL" value="{{ old('slug') }}" id="slug" class=" outline outline-slate-200 p-1 rounded bg-white dark:bg-zinc-900 dark:outline-slate-800" autocomplete="off" min="2" maxlength="32">
+        <input type="text" name="edit" placeholder="Edit Password" value="{{ old('edit') }}" id="edit" class=" outline outline-slate-200 p-1 rounded bg-white dark:bg-zinc-900 dark:outline-slate-800" autocomplete="off" minlength="1" maxlength="64">
+        <input type="text" name="access" placeholder="Access Password" value="{{ old('access') }}" id="access" class=" outline outline-slate-200 p-1 rounded bg-white dark:bg-zinc-900 dark:outline-slate-800" autocomplete="off" minlength="1" maxlength="64">
 
         <label class="relative inline-flex items-center cursor-pointer select-none">
             <input type="checkbox" name="onetime" value="1" @checked(old('onetime')) class="sr-only peer">
@@ -25,7 +25,7 @@
             <span class="ml-3 text-sm font-medium text-gray-900 dark:text-gray-300 uppercase">Burn after read</span>
         </label>
 
-        <button id="go" class=" min-w-[8rem] py-2 rounded bg-zinc-950 text-white">Go</button>
+        <button id="go" class=" min-w-[8rem] py-2 rounded bg-zinc-950 dark:bg-zinc-50 text-white dark:text-black">Go</button>
     </form>
 </div>
 @endsection

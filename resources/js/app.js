@@ -2,11 +2,16 @@ import './bootstrap';
 
 window.onload = function() {
     if (document.getElementById('area')) {
+        const isDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
         const vditor = new Vditor('area', {
             height: '100%',
             mode: 'sv',
+            theme: isDark ? 'dark': 'classic',
             preview: {
                 actions: 'none',
+                theme: {
+                    current: isDark ? 'dark' : 'light',
+                }
             },
             counter: {
                 enable: true,
@@ -50,6 +55,11 @@ window.onload = function() {
                     vditor.setValue(this.raw);
                 }
             }
+        });
+
+        window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', event => {
+            const isDark = event.matches;
+            vditor.setTheme(isDark ? 'dark' : 'classic', isDark ? 'dark' : 'light');
         });
 
         document.getElementById('go').addEventListener('click', () => {

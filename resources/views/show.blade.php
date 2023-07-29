@@ -1,7 +1,7 @@
 @extends('layouts.common')
 
 @push('styles')
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/github-markdown-css/5.2.0/github-markdown-light.min.css" integrity="sha512-bm684OXnsiNuQSyrxuuwo4PHqr3OzxPpXyhT66DA/fhl73e1JmBxRKGnO/nRwWvOZxJLRCmNH7FII+Yn1JNPmg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/github-markdown-css/5.2.0/github-markdown.min.css" integrity="sha512-Ya9H+OPj8NgcQk34nCrbehaA0atbzGdZCI2uCbqVRELgnlrh8vQ2INMnkadVMSniC54HChLIh5htabVuKJww8g==" crossorigin="anonymous" referrerpolicy="no-referrer" />
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/remixicon/3.4.0/remixicon.min.css" integrity="sha512-13RM4Q4wPLiDEFNxKQbZMoyM3qR3eIsTYoXy6hJlqWmPzFCBLyxG3LGx/48N+sTcLxvN3IoThkZYxo3yuaGSvw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
 @endpush
 
@@ -9,12 +9,12 @@
 
 @if (request()->session()->has('edit'))
 <div class=" p-4 rounded bg-green-600 text-white font-sans text-base select-none cursor-default">
-    Your edit password is <b class=" select-all text-lg">{{ request()->session()->get('edit') }}</b>
+    SAVE your edit password: <b class=" select-all text-lg">{{ request()->session()->get('edit') }}</b>
 </div>
 @endif
 
 <section>
-    <main id="md" class=" flex-1 w-full rounded p-4 markdown-body">
+    <main id="md" class=" flex-1 w-full rounded p-4 markdown-body bg-white dark:bg-zinc-800">
         @markdown($content->markdown)
     </main>
 
@@ -31,8 +31,8 @@
 <div class=" grid grid-cols-2 md:flex flex-row gap-4 md:justify-end md:items-center">
     <a id="spam" class=" px-4 py-1 bg-red-700 hover:bg-red-600 text-white cursor-pointer rounded uppercase w-full md:w-auto" onclick="toggle('report')"><i class="ri-spam-2-line"></i> Spam</a>
     <a class=" px-4 py-1 bg-red-200 hover:bg-red-100 disabled:bg-red-100 text-black disabled:text-slate-500 cursor-pointer rounded uppercase" href="{{ route('content.edit', ['content' => $content->slug]) }}">Edit</a>
-    <a id="png" class=" px-4 py-1 bg-slate-900 hover:bg-slate-700 text-white cursor-pointer rounded uppercase"><i class="ri-image-line"></i> Export .png</a>
-    <a id="pdf" class=" px-4 py-1 bg-slate-900 hover:bg-slate-700 text-white cursor-pointer rounded uppercase"><i class="ri-file-pdf-line"></i> Export .pdf</a>
+    <a id="png" class=" px-4 py-1 bg-slate-900 dark:bg-slate-800 hover:bg-slate-700 dark:hover:bg-slate-600 text-white cursor-pointer rounded uppercase"><i class="ri-image-line"></i> Export .png</a>
+    <a id="pdf" class=" px-4 py-1 bg-slate-900 dark:bg-slate-800 hover:bg-slate-700 dark:hover:bg-slate-600 text-white cursor-pointer rounded uppercase"><i class="ri-file-pdf-line"></i> Export .pdf</a>
 </div>
 
 <div id="report" tabindex="-1" class="fixed top-0 left-0 w-screen min-h-screen z-50 hidden p-4 overflow-x-hidden overflow-y-auto md:inset-0 justify-center items-center bg-[rgba(0,0,0,0.2)]">
