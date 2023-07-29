@@ -54,7 +54,7 @@ window.onload = function() {
 
         document.getElementById('go').addEventListener('click', () => {
             document.getElementsByName('markdown')[0].value = vditor.getValue();
-            vditor.setValue('');
+            // vditor.setValue('');
             document.forms['mainform'].submit();
         })
     }
