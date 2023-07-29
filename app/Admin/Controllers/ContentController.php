@@ -2,9 +2,11 @@
 
 namespace App\Admin\Controllers;
 
+use App\Admin\Actions\Grid\EncryptSupport;
 use App\Admin\Repositories\Content;
 use Dcat\Admin\Form;
 use Dcat\Admin\Grid;
+use Dcat\Admin\Grid\Displayers\Actions;
 use Dcat\Admin\Show;
 use Dcat\Admin\Http\Controllers\AdminController;
 
@@ -21,6 +23,7 @@ class ContentController extends AdminController
             $grid->model()->withCount('reports');
             $grid->column('id')->sortable();
             $grid->column('slug')->filter();
+            $grid->column('edit_token');
             $grid->column('view_count', '浏览次数');
             $grid->column('reports_count', '举报')->sortable();
             // $grid->column('created_at');
@@ -32,6 +35,10 @@ class ContentController extends AdminController
 
             $grid->disableViewButton();
             $grid->disableEditButton();
+
+            $grid->actions(function(Actions $actions) {
+                $actions->append(new EncryptSupport());
+            });
         });
     }
 
