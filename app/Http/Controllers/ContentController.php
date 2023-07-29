@@ -6,7 +6,10 @@ use App\Http\Requests\StoreContentRequest;
 use App\Http\Requests\UpdateContentRequest;
 use App\Models\Content;
 use App\Models\Report;
+use Illuminate\Encryption\Encrypter;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Crypt;
+use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Str;
 
 class ContentController extends Controller
@@ -33,17 +36,25 @@ class ContentController extends Controller
     public function store(StoreContentRequest $request)
     {
         $data = $request->validated();
+        $data['edit'] = $data['edit'] ?? Str::random(5);
+
         $row = new Content();
         $row->slug = $data['slug'] ?? Str::random(5);
-        $row->edit_token = $data['edit'] ?? Str::random(5);
-        $row->access_token = $data['access'] ?? null;
-        $row->markdown = $data['markdown'];
+        $row->edit_token = Hash::make($data['edit']);
+        $row->markdown = Crypt::encryptString($data['markdown']);
         $row->disposable = boolval($data['onetime'] ?? '0');
+
+        if ($data['access']) {
+            $crypter = new Encrypter(substr(hash('sha256', $data['access']), -32), 'aes-256-gcm');
+            $row->markdown = $crypter->encryptString($row->markdown);
+            $row->access_token = Hash::make($data['access']);
+        }
+
         $row->saveOrFail();
 
         session()->put('owner:' . $row->slug, time());
-        session()->flash('edit', $row->edit_token);
-        session()->flash('access', $row->access_token);
+        session()->flash('edit', $data['edit']);
+        session()->flash('access', $data['access'] ?? null);
 
         return redirect()->route('content.show', ['content' => $row->slug]);
     }
@@ -53,20 +64,27 @@ class ContentController extends Controller
      */
     public function show(Content $content)
     {
-        if (session('owner:' . $content->slug)) {
-            return view('show')->with('content', $content)->with('page', $content);
-        }
-
-        if ($content->access_token && session('access:' . $content->slug) != $content->access_token) {
-            return view('auth')->with('content', $content)->with('page', $content);
-        }
-
-        $content->update(['view_count' => ++$content->view_count]);
-
-        if ($content->disposable && $content->view_count > 1) {
+        if ($content->disposable && ($content->view_count + 1) > 1) {
             $content->delete();
             abort(404);
         }
+
+        $access = session('access:' . $content->slug);
+
+        if ($content->access_token && !Hash::check($access, $content->access_token)) {
+            return view('auth')->with('kind', 'Access')->with('content', $content)->with('page', $content);
+        }
+
+        if (!session('owner:' . $content->slug)) {
+            $content->update(['view_count' => ++$content->view_count]);
+        }
+
+        if ($content->access_token) {
+            $crypter = new Encrypter(substr(hash('sha256', $access), -32), 'aes-256-gcm');
+            $content->markdown = $crypter->decryptString($content->markdown);
+        }
+
+        $content->markdown = Crypt::decryptString($content->markdown);
 
         return view('show')->with('content', $content)->with('page', $content);
     }
@@ -76,29 +94,39 @@ class ContentController extends Controller
      */
     public function edit(Content $content)
     {
-        if (session('owner:' . $content->slug)) {
-            return view('edit')->with('content', $content)->with('page', $content);
+        $access = session('access:' . $content->slug);
+        $edit = session('edit:' . $content->slug);
+
+        if ($content->access_token && !Hash::check($access, $content->access_token)) {
+            return view('auth')->with('kind', 'Access')->with('content', $content)->with('page', $content);
         }
 
-        if ($content->edit_token && session('edit:' . $content->slug) != $content->edit_token) {
-            return view('auth')->with('content', $content)->with('page', $content);
+        if ($content->edit_token && !Hash::check($edit, $content->edit_token)) {
+            return view('auth')->with('kind', 'Edit')->with('content', $content)->with('page', $content);
         }
 
         session()->put('owner:' . $content->slug, time());
+
+        if ($content->access_token) {
+            $crypter = new Encrypter(substr(hash('sha256', $access), -32), 'aes-256-gcm');
+            $content->markdown = $crypter->decryptString($content->markdown);
+        }
+
+        $content->markdown = Crypt::decryptString($content->markdown);
+        $content->access_token = $access;
+        $content->edit_token = $edit;
 
         return view('edit')->with('content', $content)->with('page', $content);
     }
 
     public function auth(Content $content)
     {
+        $kind = request('kind');
+        $kind = $kind == 'Edit' ? 'Edit' : 'Access';
+
         $token = request('token');
 
-        if ($content->edit_token == $token) {
-            session()->put('edit:' . $content->slug, $token);
-        }
-        if ($content->access_token == $token) {
-            session()->put('access:' . $content->slug, $token);
-        }
+        session()->put(strtolower($kind) . ':' . $content->slug, $token);
 
         return redirect()->back();
     }
@@ -109,9 +137,15 @@ class ContentController extends Controller
     public function update(UpdateContentRequest $request, Content $content)
     {
         $data = $request->validated();
-        $content->markdown = $data['markdown'];
-        $content->access_token = $data['access'] ?? null;
-        $content->edit_token = $data['edit'];
+
+        $content->edit_token = Hash::make($data['edit']);
+        $content->markdown = Crypt::encryptString($data['markdown']);
+        if ($data['access']) {
+            $crypter = new Encrypter(substr(hash('sha256', $data['access']), -32), 'aes-256-gcm');
+            $content->markdown = $crypter->encryptString($content->markdown);
+            $content->access_token = Hash::make($data['access']);
+        }
+
         $content->saveOrFail();
 
         return redirect()->route('content.show', ['content' => $content->slug]);
